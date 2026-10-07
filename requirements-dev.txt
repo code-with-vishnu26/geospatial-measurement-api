@@ -1,0 +1,5 @@
+-r requirements.txt
+pytest==9.1.1
+# Starlette's TestClient now targets httpx2, the maintained successor of httpx.
+httpx2==2.13.1
+ruff==0.16.10

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Bengaluru survey</name>
+    <Folder>
+      <name>Parks</name>
+      <Placemark id="lalbagh">
+        <name>Lalbagh Botanical Garden</name>
+        <ExtendedData>
+          <Data name="category"><value>botanical garden</value></Data>
+          <Data name="surveyed_by"><value>Team A</value></Data>
+        </ExtendedData>
+        <Polygon><outerBoundaryIs><LinearRing><coordinates>77.58,12.953 77.589,12.953 77.5905,12.948 77.585,12.9445 77.5795,12.9475 77.58,12.953</coordinates></LinearRing></outerBoundaryIs></Polygon>
+      </Placemark>
+      <Placemark id="cubbon">
+        <name>Cubbon Park</name>
+        <Polygon><outerBoundaryIs><LinearRing><coordinates>77.59,12.979 77.599,12.979 77.599,12.971 77.59,12.971 77.59,12.979</coordinates></LinearRing></outerBoundaryIs></Polygon>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Roads</name>
+      <Placemark id="mg-road">
+        <name>MG Road</name>
+        <LineString><coordinates>77.601,12.975 77.607,12.9745 77.613,12.974</coordinates></LineString>
+      </Placemark>
+    </Folder>
+    <Placemark id="survey-marker">
+      <name>Survey control point</name>
+      <Point><coordinates>77.5946,12.9716,920</coordinates></Point>
+    </Placemark>
+  </Document>
+</kml>

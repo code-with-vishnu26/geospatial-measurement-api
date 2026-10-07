@@ -1,0 +1,17 @@
+# Convenience wrapper: builds the image, persists uploads + SQLite in a named
+# volume, and reads optional overrides from .env.
+services:
+  api:
+    build: .
+    image: geospatial-measurement-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - geo-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  geo-data:
