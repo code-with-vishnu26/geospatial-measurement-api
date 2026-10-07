@@ -29,6 +29,7 @@ curl http://localhost:8000/api/files/<id>/measurements/
 - [Trade-offs](#trade-offs)
 - [Future Improvements](#future-improvements)
 - [Testing](#testing)
+- [Verification Results](#verification-results)
 - [Assignment Notes](#assignment-notes)
 
 ---
@@ -624,6 +625,49 @@ implementation itself produced.
 | Archive security (26) | Path traversal variants (`../`, `..\`, absolute, UNC, drive letters), symlinks, member count, zip-bomb ratio, total size, missing/mismatched/multiple components, macOS metadata, fixed-name extraction |
 | Upload utilities (26) | Filename sanitisation, extension and magic-byte checks, streaming size limit with cleanup, empty files |
 | API and concurrency (46) | All endpoints; valid KML and Shapefile ZIP; projected Shapefile; missing CRS with and without `assumed_crs`; invalid `.prj`; invalid file type and content; malformed ZIP; missing components; zip-slip; malformed KML → FAILED record; 404 / 409 / 422; **413 via `Content-Length`, via a chunked stream, and via the endpoint's own check**; pagination; no server paths in errors; unexpected crash → generic 500 + FAILED record; timezone-aware timestamps; identical results for the same geometry from KML and Shapefile; SQLite WAL/busy-timeout configuration; 6 parallel uploads all succeed |
+
+## Verification Results
+
+Checks run before submission (2026-10-07):
+
+| Check | Command / method | Result |
+|---|---|---|
+| Fresh clone of this repository | `git clone` → new venv → `pip install -r requirements-dev.txt` → `pytest` | **191 passed in 9.21 s** (Windows 11, Python 3.12.10, pytest 9.1.1) |
+| Unit tests | `pytest tests/unit` | 145 passed |
+| Integration tests | `pytest tests/integration` | 46 passed |
+| Lint and formatting | `ruff check .` and `ruff format --check .` | Clean |
+| Sample files | Uploaded all three files in [samples/](samples/), both locally and in Docker | All `COMPLETED` |
+| Concurrent uploads | 8 parallel uploads against a live uvicorn server | 8 of 8 succeeded, no `database is locked` errors |
+| Hostile input | 5,000-level nested KML and UTF-16 KML against a live server | Processed without errors |
+| Docker | `docker compose up --build` | Container reports `healthy`, runs as non-root `appuser`, SQLite in WAL mode |
+
+The fresh-clone run confirms that the repository contains every file the tests need, that
+`requirements-dev.txt` is complete, and that the [Local Setup](#local-setup) steps work as written.
+
+![pytest run in a fresh clone: 191 passed in 9.21s](docs/images/fresh-clone-pytest.png)
+
+Fresh-clone output:
+
+```text
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1
+collected 191 items
+
+tests\integration\test_concurrency.py ..                                    [  1%]
+tests\integration\test_file_resources_api.py ....................           [ 11%]
+tests\integration\test_upload_api.py ........................               [ 24%]
+tests\unit\test_crs_service.py ................................             [ 40%]
+tests\unit\test_file_utils.py ..........................                    [ 54%]
+tests\unit\test_kml_processor.py ......................                     [ 65%]
+tests\unit\test_measurement_service.py .........................            [ 79%]
+tests\unit\test_processing_service.py .....                                 [ 81%]
+tests\unit\test_shapefile_processor.py .........                            [ 86%]
+tests\unit\test_zip_utils.py ..........................                     [100%]
+
+191 passed in 9.21s
+```
 
 ## Assignment Notes
 
