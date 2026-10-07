@@ -646,6 +646,10 @@ The fresh-clone run confirms that the repository contains every file the tests n
 
 ![pytest run in a fresh clone: 191 passed in 9.21s](docs/images/fresh-clone-pytest.png)
 
+The built Docker image (`geospatial-measurement-api:latest`, 481 MB) in Docker Desktop:
+
+![Docker Desktop showing the geospatial-measurement-api:latest image, 481.33 MB](docs/images/docker-image.png)
+
 Fresh-clone output:
 
 ```text
